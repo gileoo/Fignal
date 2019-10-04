@@ -4,16 +4,25 @@ open OxyPlot
 open Helper
 
 let Akima () =
-    let X = [|0.0; 1.0; 2.0; 3.0; 4.5; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0|]
-    let Y = [|10.0; 10.0; 11.0; 14.0; 10.0; 20.0; 10.5; 15.0; 50.0; 60.0; 85.0|]
+    let X  = [|0.0; 1.0; 2.0; 3.0; 4.5; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0|]
+    let Y  = [|10.0; 10.0; 11.0; 14.0; 10.0; 20.0; 10.5; 15.0; 50.0; 60.0; 85.0|]
     let XY = Y |> Array.zip X
 
-    let TAkima = Akima.PrecomputeSlopes X Y
-
-    let XI = [|0.0 .. 0.1 .. 10.0|] 
-    let YI = XI |> Array.map( Akima.Interpolate X Y )
-
+    
+    let XI  = [|0.0 .. 0.1 .. 10.0|] 
+    
+    // direct computation
+    let YI  = XI |> Array.map( Akima.Interpolate X Y )
     let XYI = YI |> Array.zip XI
+
+    // compute via precomputed slopes
+    let TAkima = Akima.PrecomputeSlopes X Y
+    let YI2 = XI |> Array.map( Akima.InterpolatePrecomputed X Y TAkima )
+
+    // check equality the two methods
+    YI 
+    |> Array.zip YI2
+    |> Array.iter( fun (a,b) -> if a <> b then printfn "Unmatching results: %f <> %f" a b )
 
     let model =  new PlotModel()
 
@@ -21,11 +30,11 @@ let Akima () =
     model.IsLegendVisible <- false
 
     let series = new Series.LineSeries()
-    XYI |> Array.iter( fun x -> series.Points.Add( new DataPoint( fst x, snd x ) ) )
+    XYI |> Array.iter( fun (x,y) -> series.Points.Add( new DataPoint( x, y ) ) )
     model.Series.Add( series )
 
     let pointSeries = new Series.ScatterSeries()
-    XY |> Array.iter( fun x -> pointSeries.Points.Add( new Series.ScatterPoint( fst x, snd x, 5.0 ) ) )
+    XY |> Array.iter( fun (x,y) -> pointSeries.Points.Add( new Series.ScatterPoint( x, y, 5.0 ) ) )
     model.Series.Add( pointSeries )
 
     showChartAndRun "Akima Interpolation" model |> ignore
