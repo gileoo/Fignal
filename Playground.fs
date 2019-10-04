@@ -11,10 +11,7 @@ let Akima () =
     let TAkima = Akima.PrecomputeSlopes X Y
 
     let XI = [|0.0 .. 0.1 .. 10.0|] 
-    let YI = XI |> Array.map( fun x ->
-        let y = Akima.Interpolate X Y x // cubicIpol X Y TAkima x
-        //printfn "%.2f: %.2f" x y 
-        y )
+    let YI = XI |> Array.map( Akima.Interpolate X Y )
 
     let XYI = YI |> Array.zip XI
 
