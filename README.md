@@ -1,2 +1,3 @@
 # Fignal
-Some signal related algorithms
+
+Some signal related algorithms for FSharp.
