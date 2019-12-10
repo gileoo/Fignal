@@ -30,11 +30,12 @@ let createLineModel ( xy : (float*float)[]) =
     model
 
 
-let createPointsModel ( xy : (float*float)[]) =
-    let model =  new PlotModel()
-
-    model.Background <- OxyColor.FromRgb( 255uy, 255uy, 255uy )
-    model.IsLegendVisible <- false
+let createPointsModel ( xy : (float*float)[]) title =
+    let model =  
+        new PlotModel(
+            Title = title, 
+            Background = OxyColor.FromRgb( 255uy, 255uy, 255uy ), 
+            IsLegendVisible = false )
 
     let colAxis = 
         new Axes.LinearColorAxis( 
@@ -51,7 +52,7 @@ let createPointsModel ( xy : (float*float)[]) =
     xy |> Array.iteri( fun i x -> 
         series.Points.Add( 
             let lIdx = (float i) / (float xy.Length)
-            new Series.ScatterPoint( fst x, snd x, 4.0 - 2.0 * lIdx, 0.5 * (float i) ) ) )
+            new Series.ScatterPoint( fst x, snd x, 1.0, 1.0 (*, 4.0 - 2.0 * lIdx, 0.5 * (float i) *) ) ) )
 
 
     model.DefaultFont <- "Times"
@@ -61,3 +62,9 @@ let createPointsModel ( xy : (float*float)[]) =
     model.Series.Add( series )
 
     model
+
+
+let exportPDF path name (model:PlotModel) =
+    let sw = System.IO.File.CreateText( System.IO.Path.Combine( path, name + ".pdf" ) )
+    let exporter = new PdfExporter( Width=model.Width, Height=model.Height )
+    exporter.Export( model, sw.BaseStream )

@@ -82,13 +82,57 @@ let DFT () =
 
 
 let Halton() =
-    Halton.test 2 1024
-    Halton.test 3 1024
     
-    let haltonPts = 
-        Halton.haltonSeq2 2 3 4096
-        |> Seq.toArray
+    let size = 4096
 
-    let pointsModel = createPointsModel haltonPts
+    Halton.test 2 size
+    Halton.test 3 size
 
-    showChartAndRun "Halton Test" pointsModel
+    let exportCppArray prefix (arr:(float*float)[]) =
+        use sw = System.IO.File.CreateText( sprintf "./%s.hpp" prefix )
+ 
+        sw.WriteLine (sprintf "#ifndef %s_HPP" (prefix.ToUpper())) 
+        sw.WriteLine (sprintf "#define %s_HPP" (prefix.ToUpper())) 
+        sw.WriteLine "\n\n#include <array>"
+        sw.WriteLine (sprintf "\n\nstd::array<float,%d> %s = { " (2*arr.Length) prefix)
+        sw.Write "    "
+
+        arr
+        |> Array.iteri( fun i x -> 
+            if i < arr.Length-1 then
+                sw.Write (sprintf "%f, %f, " (fst x) (snd x))
+            else
+                sw.Write (sprintf "%f, %f " (fst x) (snd x))
+            if (i+1) % 10 = 0 then
+                sw.Write "\n    "
+            )
+
+        sw.WriteLine "};\n#endif"
+
+    let doHaltonPair size a b  =
+        let haltonPts = 
+            Halton.haltonSeq2 a b size
+            |> Seq.toArray
+
+        let splitAndOffset (arr:(float*float)[]) =
+            let a, b = arr |> Array.splitAt( arr.Length / 2 )
+            let scaleA    = a |> Array.map( fun x -> (0.5 * (fst x), snd x) )
+            let scaleOffB = b |> Array.map( fun x -> (0.5 + 0.5 * (fst x), snd x) )
+
+            scaleA |> Array.append scaleOffB
+
+        let haltonDoubleX = splitAndOffset haltonPts         
+
+        let pointsModel = createPointsModel haltonPts (sprintf "Halton%d%d" a b)
+        showChartAndRun (sprintf "Halton%d%d" a b) pointsModel
+        exportPDF "." (sprintf "Halton%d%d" a b) pointsModel
+        exportCppArray (sprintf "halton%d%d" a b) haltonPts 
+
+        let pointsModelDoubleX = createPointsModel haltonDoubleX (sprintf "Halton%d%d" a b)
+        showChartAndRun (sprintf "Halton%d%d" a b) pointsModelDoubleX
+        exportPDF "." (sprintf "Halton%d%d" a b) pointsModelDoubleX
+        exportCppArray (sprintf "halton2X%d%d" a b) haltonDoubleX 
+
+    doHaltonPair size 2 3
+    doHaltonPair size 3 4
+    doHaltonPair size 4 5
