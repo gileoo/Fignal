@@ -128,9 +128,9 @@ let Halton() =
         exportPDF "." (sprintf "Halton%d%d" a b) pointsModel
         exportCppArray (sprintf "halton%d%d" a b) haltonPts 
 
-        let pointsModelDoubleX = createPointsModel haltonDoubleX (sprintf "Halton%d%d" a b)
-        showChartAndRun (sprintf "Halton%d%d" a b) pointsModelDoubleX
-        exportPDF "." (sprintf "Halton%d%d" a b) pointsModelDoubleX
+        let pointsModelDoubleX = createPointsModel haltonDoubleX (sprintf "Halton2X%d%d" a b)
+        showChartAndRun (sprintf "Halton2X%d%d" a b) pointsModelDoubleX
+        exportPDF "." (sprintf "Halton2X%d%d" a b) pointsModelDoubleX
         exportCppArray (sprintf "halton2X%d%d" a b) haltonDoubleX 
 
     doHaltonPair size 2 3
