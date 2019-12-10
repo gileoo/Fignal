@@ -6,6 +6,8 @@ let main argv =
 
     //Playground.Akima()
 
-    Playground.DFT()
+    //Playground.DFT()
+
+    Playground.Halton()
 
     0 // return an integer exit code

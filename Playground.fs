@@ -2,6 +2,7 @@
 
 open OxyPlot
 open Helper
+open Halton
 
 let Akima () =
     let X  = [|0.0; 1.0; 2.0; 3.0; 4.5; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0|]
@@ -78,3 +79,16 @@ let DFT () =
 
     showChartAndRun "Wave Test" waveModel
     showChartAndRun "Fourier Test" fourierModel
+
+
+let Halton() =
+    Halton.test 2 1024
+    Halton.test 3 1024
+    
+    let haltonPts = 
+        Halton.haltonSeq2 2 3 4096
+        |> Seq.toArray
+
+    let pointsModel = createPointsModel haltonPts
+
+    showChartAndRun "Halton Test" pointsModel
