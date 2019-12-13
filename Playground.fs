@@ -83,7 +83,7 @@ let DFT () =
 
 let Halton() =
     
-    let size = 4096
+    let size = 2048
 
     Halton.test 2 size
     Halton.test 3 size
@@ -109,6 +109,41 @@ let Halton() =
 
         sw.WriteLine "};\n#endif"
 
+
+    let toVec3 (h1) (h2) (radius) =
+        let theta = 2.0 * System.Math.PI * h1
+        let phi   = acos( 1.0 - 2.0 * h2 )
+
+        let r_sin_phi = radius * sin( phi )
+
+        (   r_sin_phi * cos( theta ),
+            r_sin_phi * sin( theta ),
+            radius * cos( phi ) ) 
+
+    let exportCppVec3Array prefix (arr:(float*float)[]) =
+        use sw = System.IO.File.CreateText( sprintf "./%s.hpp" prefix )
+ 
+        sw.WriteLine (sprintf "#ifndef %s_HPP" (prefix.ToUpper())) 
+        sw.WriteLine (sprintf "#define %s_HPP" (prefix.ToUpper())) 
+        sw.WriteLine "\n\n#include <array>"
+        sw.WriteLine (sprintf "\n\nstd::array<float,%d> %s = { " (3*arr.Length) prefix)
+        sw.Write "    "
+
+        arr
+        |> Array.iteri( fun i x -> 
+            let vx, vy, vz = toVec3 (fst x) (snd x) 1.0
+            
+            if i < arr.Length-1 then
+                sw.Write (sprintf "%f, %f, %f, " vx vy vz)
+            else
+                sw.Write (sprintf "%f, %f, %f " vx vy vz)
+            if (i+1) % 10 = 0 then
+                sw.Write "\n    "
+            )
+
+        sw.WriteLine "};\n#endif"
+
+
     let doHaltonPair size a b  =
         let haltonPts = 
             Halton.haltonSeq2 a b size
@@ -127,6 +162,7 @@ let Halton() =
         showChartAndRun (sprintf "Halton%d%d" a b) pointsModel
         exportPDF "." (sprintf "Halton%d%d" a b) pointsModel
         exportCppArray (sprintf "halton%d%d" a b) haltonPts 
+        exportCppVec3Array (sprintf "haltonVec3%d%d" a b) haltonPts 
 
         let pointsModelDoubleX = createPointsModel haltonDoubleX (sprintf "Halton2X%d%d" a b)
         showChartAndRun (sprintf "Halton2X%d%d" a b) pointsModelDoubleX
@@ -136,3 +172,5 @@ let Halton() =
     doHaltonPair size 2 3
     doHaltonPair size 3 4
     doHaltonPair size 4 5
+
+

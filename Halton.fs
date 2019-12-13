@@ -36,3 +36,5 @@ let test b size =
     for i = 0 to size-1 do
         if halton b i <> halton2 b i then
             failwith "result not matching"
+
+ 
