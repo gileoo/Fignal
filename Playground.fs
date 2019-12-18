@@ -3,6 +3,7 @@
 open OxyPlot
 open Helper
 open Halton
+open Center
 
 let Akima () =
     let X  = [|0.0; 1.0; 2.0; 3.0; 4.5; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0|]
@@ -174,3 +175,10 @@ let Halton() =
     doHaltonPair size 4 5
 
 
+let Harmonic() =
+
+    let hMean = 
+        [0.0 .. 10.0 ]
+        |> Center.Mean.harmonic
+
+    printfn "Harmonic mean of 0 to 10: %f" hMean

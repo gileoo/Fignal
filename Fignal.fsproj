@@ -50,6 +50,7 @@
     <Compile Include="Akima.fs" />
     <Compile Include="Fourier.fs" />
     <Compile Include="Halton.fs" />
+    <Compile Include="Center.fs" />
     <Compile Include="Helper.fs" />
     <Compile Include="Playground.fs" />
     <Compile Include="Program.fs" />
