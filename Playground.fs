@@ -135,9 +135,9 @@ let Halton() =
             let vx, vy, vz = toVec3 (fst x) (snd x) 1.0
             
             if i < arr.Length-1 then
-                sw.Write (sprintf "%f, %f, %f, " vx vy vz)
+                sw.Write (sprintf "%.15f, %.15f, %.15f, " vx vy vz)
             else
-                sw.Write (sprintf "%f, %f, %f " vx vy vz)
+                sw.Write (sprintf "%.15f, %.15f, %.15f " vx vy vz)
             if (i+1) % 10 = 0 then
                 sw.Write "\n    "
             )
