@@ -84,7 +84,7 @@ let DFT () =
 
 let Halton() =
     
-    let size = 2048
+    let size = 4096
 
     Halton.test 2 size
     Halton.test 3 size
@@ -150,6 +150,7 @@ let Halton() =
             Halton.haltonSeq2 a b size
             |> Seq.toArray
 
+(*
         let splitAndOffset (arr:(float*float)[]) =
             let a, b = arr |> Array.splitAt( arr.Length / 2 )
             let scaleA    = a |> Array.map( fun x -> (0.5 * (fst x), snd x) )
@@ -158,22 +159,41 @@ let Halton() =
             scaleA |> Array.append scaleOffB
 
         let haltonDoubleX = splitAndOffset haltonPts         
-
+*)
         let pointsModel = createPointsModel haltonPts (sprintf "Halton%d%d" a b)
         showChartAndRun (sprintf "Halton%d%d" a b) pointsModel
         exportPDF "." (sprintf "Halton%d%d" a b) pointsModel
         exportCppArray (sprintf "halton%d%d" a b) haltonPts 
         exportCppVec3Array (sprintf "haltonVec3%d%d" a b) haltonPts 
 
+    let doRandomPair size seed =
+        
+        let rnd = System.Random( seed ) 
+        
+        let randomPts = 
+            seq{
+                for i = 0 to size-1 do            
+                    yield ( rnd.NextDouble(), rnd.NextDouble() )
+                }
+            |> Seq.toArray
+
+        let pointsModel = createPointsModel randomPts (sprintf "Random%d" seed)
+        showChartAndRun (sprintf "Random%d" seed) pointsModel
+        exportCppVec3Array (sprintf "randomVec3%d" seed) randomPts 
+ 
+(*
         let pointsModelDoubleX = createPointsModel haltonDoubleX (sprintf "Halton2X%d%d" a b)
         showChartAndRun (sprintf "Halton2X%d%d" a b) pointsModelDoubleX
         exportPDF "." (sprintf "Halton2X%d%d" a b) pointsModelDoubleX
         exportCppArray (sprintf "halton2X%d%d" a b) haltonDoubleX 
+*)
+
 
     doHaltonPair size 2 3
     doHaltonPair size 3 4
     doHaltonPair size 4 5
 
+    doRandomPair size 0
 
 let Harmonic() =
 
