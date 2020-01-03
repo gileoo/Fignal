@@ -94,8 +94,8 @@ let Halton() =
  
         sw.WriteLine (sprintf "#ifndef %s_HPP" (prefix.ToUpper())) 
         sw.WriteLine (sprintf "#define %s_HPP" (prefix.ToUpper())) 
-        sw.WriteLine "\n\n#include <array>"
-        sw.WriteLine (sprintf "\n\nstd::array<float,%d> %s = { " (2*arr.Length) prefix)
+        sw.WriteLine "\n\n#include <vector>"
+        sw.WriteLine (sprintf "\n\nstd::vector<double> %s = { " prefix)
         sw.Write "    "
 
         arr
@@ -126,8 +126,8 @@ let Halton() =
  
         sw.WriteLine (sprintf "#ifndef %s_HPP" (prefix.ToUpper())) 
         sw.WriteLine (sprintf "#define %s_HPP" (prefix.ToUpper())) 
-        sw.WriteLine "\n\n#include <array>"
-        sw.WriteLine (sprintf "\n\nstd::array<float,%d> %s = { " (3*arr.Length) prefix)
+        sw.WriteLine "\n\n#include <vector>"
+        sw.WriteLine (sprintf "\n\nstd::vector<double> %s = { " prefix)
         sw.Write "    "
 
         arr
