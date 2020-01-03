@@ -179,6 +179,8 @@ let Halton() =
 
         let pointsModel = createPointsModel randomPts (sprintf "Random%d" seed)
         showChartAndRun (sprintf "Random%d" seed) pointsModel
+        exportPDF "." (sprintf "Random%d" seed) pointsModel
+        exportCppArray (sprintf "random%d" seed) randomPts
         exportCppVec3Array (sprintf "randomVec3%d" seed) randomPts 
  
 (*
@@ -188,12 +190,34 @@ let Halton() =
         exportCppArray (sprintf "halton2X%d%d" a b) haltonDoubleX 
 *)
 
+    let doBlueNoiseTable cols samples =
+        
+        let blueNoise = BlueNoise.WangTileSet()
+        
+        blueNoise.Generate( cols, samples, 12 )
+
+        let bluePts =
+            seq{
+                for t in blueNoise.tiles do
+                    for d in t.distribution do
+                        yield (float d.x, float d.y )
+            }
+            |> Seq.toArray
+
+        let pointsModel = createPointsModel bluePts (sprintf "Blue%d%d" cols samples)
+        showChartAndRun (sprintf "Blue%d%d" cols samples) pointsModel
+        exportPDF "." (sprintf "blue%d%d" cols samples) pointsModel
+        exportCppArray (sprintf "blue%d%d" cols samples) bluePts
+        exportCppVec3Array (sprintf "blueVec3%d%d" cols samples) bluePts 
+
 
     doHaltonPair size 2 3
     doHaltonPair size 3 4
     doHaltonPair size 4 5
 
     doRandomPair size 0
+
+    doBlueNoiseTable 1 4096 
 
 let Harmonic() =
 
