@@ -211,9 +211,10 @@ let Halton() =
         exportCppVec3Array (sprintf "blueVec3%d%d" cols samples) bluePts 
 
 
-    doHaltonPair size 2 3
-    doHaltonPair size 3 4
-    doHaltonPair size 4 5
+    doHaltonPair (4*4096) 2 3
+    doHaltonPair (4*4096) 3 4
+    doHaltonPair (4*4096) 4 5
+    doHaltonPair (4*4096) 5 6
 
     doRandomPair size 0
 
