@@ -95,7 +95,7 @@ let Halton() =
         sw.WriteLine (sprintf "#ifndef %s_HPP" (prefix.ToUpper())) 
         sw.WriteLine (sprintf "#define %s_HPP" (prefix.ToUpper())) 
         sw.WriteLine "\n\n#include <vector>"
-        sw.WriteLine (sprintf "\n\nstd::vector<double> %s = { " prefix)
+        sw.WriteLine (sprintf "\n\nstd::vector<float> %s = { " prefix)
         sw.Write "    "
 
         arr
@@ -127,7 +127,7 @@ let Halton() =
         sw.WriteLine (sprintf "#ifndef %s_HPP" (prefix.ToUpper())) 
         sw.WriteLine (sprintf "#define %s_HPP" (prefix.ToUpper())) 
         sw.WriteLine "\n\n#include <vector>"
-        sw.WriteLine (sprintf "\n\nstd::vector<double> %s = { " prefix)
+        sw.WriteLine (sprintf "\n\nstd::vector<float> %s = { " prefix)
         sw.Write "    "
 
         arr
@@ -211,14 +211,16 @@ let Halton() =
         exportCppVec3Array (sprintf "blueVec3%d%d" cols samples) bluePts 
 
 
-    doHaltonPair (4*4096) 2 3
-    doHaltonPair (4*4096) 3 4
-    doHaltonPair (4*4096) 4 5
-    doHaltonPair (4*4096) 5 6
+    let nr = 4096 // * 4
+    
+    doHaltonPair nr 2 3
+    doHaltonPair nr 3 4
+    doHaltonPair nr 4 5
+    doHaltonPair nr 5 6
 
     doRandomPair size 0
 
-    doBlueNoiseTable 1 4096 
+    doBlueNoiseTable 1 nr 
 
 let Harmonic() =
 

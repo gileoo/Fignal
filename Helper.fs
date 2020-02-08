@@ -52,10 +52,10 @@ let createPointsModel ( xy : (float*float)[]) title =
     xy |> Array.iteri( fun i x -> 
         series.Points.Add( 
             let lIdx = (float i) / (float xy.Length)
-            new Series.ScatterPoint( fst x, snd x, 1.0, 1.0 (*, 4.0 - 2.0 * lIdx, 0.5 * (float i) *) ) ) )
+            new Series.ScatterPoint( fst x, snd x, 2.0, float i (*, 4.0 - 2.0 * lIdx, 0.5 * (float i) *) ) ) )
 
 
-    model.DefaultFont <- "Times"
+    model.DefaultFont <- "Palatino Linotype"
     model.DefaultFontSize <- 30.0
 
     model.Axes.Add( colAxis )
