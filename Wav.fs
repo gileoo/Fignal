@@ -2,6 +2,8 @@
 
 open System.IO
 
+// F#ified based on yoma's code at https://gist.github.com/yomakkkk/2290864
+
 type Header =
     {
         riffID : byte[]    
@@ -21,11 +23,12 @@ type Header =
 
 type Data =
     {
-        header : Header
-        left   :  int16 []
-        right  :  int16 []
+        header : Header   // meta data
+        left   : int16 [] // left channel
+        right  : int16 [] // right channel
     }
 
+/// Read in all samples from a wav file
 let readAllWav( uri : string ) =
     use inFile = new FileStream( uri, FileMode.Open, FileAccess.Read )
     use reader = new BinaryReader( inFile )
