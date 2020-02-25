@@ -9,6 +9,6 @@ let main argv =
     //Playground.Halton()
     //Playground.Harmonic()
 
-    Playground.DFTWav()
+    Playground.DFTWavCompact()
 
     0 // return an integer exit code

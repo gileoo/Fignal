@@ -84,52 +84,36 @@ let DFT () =
 
 let DFTWav() =
     let wav = Wav.readAllWav "E:/2020/Audio/MesoTest.wav"
-    printfn "%A" wav
+    //printfn "%A" wav
 
+    (*
     let graphLeft = 
         wav.left
         |> Array.mapi( fun i x -> float i, float x )
 
-    let graphRight = 
-        wav.left
-        |> Array.mapi( fun i x -> float i, float x )
-
     let leftModel  = createLineModel graphLeft
-    let rightModel = createLineModel graphRight
-
-//    showChartAndRun (sprintf "Wav Left,  size: %d" wav.left.Length) leftModel
-//    showChartAndRun (sprintf "Wav Right, size: %d" wav.left.Length) rightModel
-
-    let samMax = 8 * 1024   
-    let rows   = samMax / 32
-
-    let cols = wav.left.Length / samMax
-
-    let spectrogram = Array2D.zeroCreate cols rows
+    showChartAndRun (sprintf "Wav Left,  size: %d" wav.left.Length) leftModel
+    *)
 
     let timer = System.Diagnostics.Stopwatch.StartNew()
 
-    wav.right
-    |> Array.chunkBySize samMax
-    |> Array.Parallel.iteri( fun c arr -> 
-        printf "."
-        if c < cols then
-            let xn = 
-                [|0 .. arr.Length-1|]
-                |> Array.map( fun i -> {Fourier.Imaginary.Re = float (arr.[i]); Fourier.Imaginary.Im = 0.0} )
-            
-            let fourier = Fourier.forwardDFT xn
-
-            fourier
-            |> Array.iteri( fun i x -> 
-                if i < rows then
-                    spectrogram.[c, i] <- x.AbsSum() ) 
-        )
+    let nrSamples = 8 * 1024    
+    let spectro = Wav.dFourierL nrSamples 32 wav
 
     printfn "\ndone in %.1f [secs]" timer.Elapsed.TotalSeconds
     
-    let spectroModel = createHeatModel (float cols - 1.0) ( 1.0 ) spectrogram
+    let spectroModel = createHeatModel (-1.0) (float (spectro.GetLength(0)-1)) ( 1.0 ) spectro
+    
     showChartAndRun "Spectro Test" spectroModel
+
+
+let DFTWavCompact() =
+    Wav.readAllWav "E:/2020/Audio/MesoTest.wav"
+    |> Wav.dFourierL 8192 32
+    |> createHeatModel (-1.0) (1.0) ( 1.0 ) 
+    |> showChartAndRun "Spectro Test"
+
+
 
 let Halton() =
     

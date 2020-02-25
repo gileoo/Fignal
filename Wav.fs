@@ -1,6 +1,7 @@
 ﻿module Wav
 
 open System.IO
+open Fourier
 
 // F#ified based on yoma's code at https://gist.github.com/yomakkkk/2290864
 
@@ -61,5 +62,30 @@ let readAllWav( uri : string ) =
        left= lData 
        right= rData }
 
+/// Compute discrete fourier transform of left channel, output only the lower fraction.
+let dFourierL (samples:int) (fraction:int) (dat:Data) =
+    let samMax = samples 
+    let rows   = samMax / fraction
 
+    let cols = dat.left.Length / samMax
+
+    let spectrogram = Array2D.zeroCreate cols rows
+
+    dat.left
+    |> Array.chunkBySize samMax
+    |> Array.Parallel.iteri( fun c arr -> 
+        printf "."
+        if c < cols then
+            let xn = 
+                [|0 .. arr.Length-1|]
+                |> Array.map( fun i -> {Fourier.Imaginary.Re = float (arr.[i]); Fourier.Imaginary.Im = 0.0} )
         
+            let fourier = Fourier.forwardDFT xn
+
+            fourier
+            |> Array.iteri( fun i x -> 
+                if i < rows then
+                    spectrogram.[c, i] <- x.AbsSum() ) 
+        )
+
+    spectrogram
