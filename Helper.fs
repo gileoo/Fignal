@@ -29,6 +29,28 @@ let createLineModel ( xy : (float*float)[]) =
 
     model
 
+let createHeatModel (xsize : float) (ysize : float) (data : float[,]) =
+    let model =  new PlotModel()
+
+    model.Background <- OxyColor.FromRgb( 255uy, 255uy, 255uy )
+    model.IsLegendVisible <- false
+
+    let heatMapSeries = new Series.HeatMapSeries(
+            X0 = 0.0,
+            X1 = xsize,
+            Y0 = 0.0,
+            Y1 = ysize,
+            Interpolate = true,
+            RenderMethod = Series.HeatMapRenderMethod.Bitmap,
+            Data = data
+        )
+
+    model.Series.Add( heatMapSeries )
+
+    model.Axes.Add( new Axes.LinearColorAxis( Palette = OxyPalettes.Hot( 256 ) ))
+
+    model
+
 
 let createPointsModel ( xy : (float*float)[]) title =
     let model =  
