@@ -100,8 +100,8 @@ let DFTWav() =
 //    showChartAndRun (sprintf "Wav Left,  size: %d" wav.left.Length) leftModel
 //    showChartAndRun (sprintf "Wav Right, size: %d" wav.left.Length) rightModel
 
-    let samMax = 8096
-    let rows   = 256 // cut a portion of the rows
+    let samMax = 8 * 1024   
+    let rows   = samMax / 32
 
     let cols = wav.left.Length / samMax
 
@@ -128,7 +128,7 @@ let DFTWav() =
 
     printfn "\ndone in %.1f [secs]" timer.Elapsed.TotalSeconds
     
-    let spectroModel = createHeatModel (float cols - 1.0) ( 2.0 * System.Math.PI ) spectrogram
+    let spectroModel = createHeatModel (float cols - 1.0) ( 1.0 ) spectrogram
     showChartAndRun "Spectro Test" spectroModel
 
 let Halton() =
