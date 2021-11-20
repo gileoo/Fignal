@@ -5,6 +5,30 @@ open Helper
 open Halton
 open Center
 open Wav
+open Kernels
+
+let Exp2Diff () =
+    
+    let X  =  [|-1.0 .. 0.01 .. 1.0|]
+
+    let Y = 
+        X
+        |> Kernels.Ranged.ExpDiff 0.0 1.0 1.0 2.0 
+
+    let XY = Y |> Array.zip X
+
+
+    let model =  new PlotModel()
+
+    model.Background <- OxyColor.FromRgb( 255uy, 255uy, 255uy )
+    model.IsLegendVisible <- false
+
+    let series = new Series.LineSeries()
+    XY |> Array.iter( fun (x,y) -> series.Points.Add( new DataPoint( x, y ) ) )
+    model.Series.Add( series )
+
+    showChartAndRun "Exp2Diff Kernel" model |> ignore
+
 
 let Akima () =
     let X  = [|0.0; 1.0; 2.0; 3.0; 4.5; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0|]

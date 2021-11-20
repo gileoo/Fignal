@@ -36,7 +36,8 @@ let createHeatModel (vScale: float) (xsize : float) (ysize : float) (data : floa
     model.IsLegendVisible <- false
 
 
-    let heatMapSeries = new Series.HeatMapSeries(
+    let heatMapSeries = 
+        new Series.HeatMapSeries(
             X0 = 0.0,
             X1 = xsize,
             Y0 = 0.0,
@@ -44,7 +45,7 @@ let createHeatModel (vScale: float) (xsize : float) (ysize : float) (data : floa
             Interpolate = true,
             RenderMethod = Series.HeatMapRenderMethod.Bitmap,
             Data = (data |> Array2D.map( fun x -> vScale * x ) )
-        )
+            )
 
     model.Series.Add( heatMapSeries )
 
