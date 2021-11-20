@@ -1,6 +1,15 @@
 ﻿module Kernels
 
 
+let Hat m s x =
+    let xm = (x - m) / s
+    if xm >= 0.0 && xm <= 1.0 then
+        1.0 - xm
+    else if xm >= -1.0 && xm < 0.0 then
+        xm + 1.0
+    else
+        0.0
+
 let Bateman T1 T2 x =
     exp (-x/T2) - exp (-x/T1)
 

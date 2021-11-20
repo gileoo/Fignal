@@ -6,15 +6,22 @@ open Halton
 open Center
 open Wav
 open Kernels
+open Convolution
 
 let Exp2Diff () =
     
-    let X  =  [|0.0 .. 0.1 .. 10.0|]
+    let X  =  [|0.0 .. 1.0 .. 10.0|]
+
+//    let X  =  [|1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0 |]
+    let hat = [| 0.0; 0.5; 1.0; 0.5; 0.0 |]
+
+    printfn "Conv: %A" (Convolution.convolveDiscrete X hat) 
 
     let Y = 
         X
-        |> Kernels.Ranged.ExpDiff 1.0 2.0 1.0 1.0001
-            
+        //|> Kernels.Ranged.ExpDiff 1.0 2.0 1.0 1.0001
+        |> Array.map( Kernels.Hat 4.0 4.0 )
+         
     let XY = Y |> Array.zip X
 
     //printfn "%A" XY
@@ -28,7 +35,7 @@ let Exp2Diff () =
     XY |> Array.iter( fun (x,y) -> series.Points.Add( new DataPoint( x, y ) ) )
     model.Series.Add( series )
 
-    showChartAndRun "Exp2Diff Kernel" model |> ignore
+//    showChartAndRun "Exp2Diff Kernel" model |> ignore
 
 
 let Akima () =

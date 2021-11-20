@@ -54,6 +54,7 @@
     <Compile Include="Wav.fs" />
     <Compile Include="Helper.fs" />
     <Compile Include="Kernels.fs" />
+    <Compile Include="Convolution.fs" />
     <Compile Include="Playground.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
