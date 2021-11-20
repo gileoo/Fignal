@@ -9,14 +9,15 @@ open Kernels
 
 let Exp2Diff () =
     
-    let X  =  [|0.0 .. 0.1 .. 10.0|]
+    let X  =  [|0.0 .. 1.0 .. 10.0|]
 
     let Y = 
         X
-        |> Kernels.Ranged.ExpDiff 0.0 1.0 1.0 3.0 
+        |> Kernels.Ranged.ExpDiff 1.0 2.0 1.0 1.0001
             
     let XY = Y |> Array.zip X
 
+    printfn "%A" XY
 
     let model =  new PlotModel()
 

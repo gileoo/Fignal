@@ -4,6 +4,7 @@
 let Bateman T1 T2 x =
     exp (-x/T2) - exp (-x/T1)
 
+
 module Ranged =
 
     let ExpDiff (shift) (a) (T1) (T2) (t:float[]) =
@@ -26,8 +27,10 @@ module Ranged =
             |> Array.map( fun x -> x - shift)
             |> Array.map( Bateman T1 T2 )
             |> Array.map( (*) ampScaled )
+            |> Array.map( max 0.0 )
         else
             t
             |> Array.map( fun x -> x - shift)
             |> Array.map( fun x -> ampScaled * ( exp (-x/T2) ) )
+            |> Array.map( max 0.0 )
         
