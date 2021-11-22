@@ -12,12 +12,16 @@ let Exp2Diff () =
     
     let X  =  [|0.0 .. 1.0 .. 10.0|]
 
-//    let X  =  [|1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0 |]
-    let hat = [| 0.0; 0.5; 1.0; 0.5; 0.0 |]
+    let X  =  [|1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0 |]
+    let hat = [| 0.25; 0.5; 1.0; 0.5; 0.25|]
+//    let X = [| 1.0; 0.0; 4.0; 1.0; 0.0 |]
+//    let hat = [| 2.0; 1.0 |]
 
-    printfn "Conv: %A" (Convolution.Discrete.conv X hat) 
+    let C = Convolution.Discrete.conv X hat
 
-    printfn "LDiv: %A" (Convolution.Discrete.longDiv X hat) 
+    printfn "Conv: %A" C 
+
+    printfn "LDiv: %A" (Convolution.Discrete.longDiv C hat) 
 
 
     let Y = 
