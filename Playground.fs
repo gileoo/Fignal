@@ -15,7 +15,10 @@ let Exp2Diff () =
 //    let X  =  [|1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0; 1.0 |]
     let hat = [| 0.0; 0.5; 1.0; 0.5; 0.0 |]
 
-    printfn "Conv: %A" (Convolution.convolveDiscrete X hat) 
+    printfn "Conv: %A" (Convolution.Discrete.conv X hat) 
+
+    printfn "LDiv: %A" (Convolution.Discrete.longDiv X hat) 
+
 
     let Y = 
         X
