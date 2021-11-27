@@ -52,7 +52,7 @@ let FFT () =
         [| 0 .. last |]
         |> Array.map( fun i -> float( i )/float(last+1) * 10.0 *  System.Math.PI )
     
-    let Y  = X |> Array.map( fun x -> 1.0 + sin( x ) )
+    let Y  = X |> Array.map( fun x -> sin( x ) )
 
     let Y2 = Array.zeroCreate (Y.Length * 2)
     
