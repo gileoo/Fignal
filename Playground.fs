@@ -21,7 +21,7 @@ let Exp2Diff () =
 
     printfn "Conv: %A" C 
 
-    printfn "LDiv: %A" (Convolution.Discrete.longDiv C hat) 
+    printfn "LDiv: %A" (Convolution.Discrete.deConv X hat) 
 
 
     let Y = 
@@ -43,6 +43,32 @@ let Exp2Diff () =
     model.Series.Add( series )
 
 //    showChartAndRun "Exp2Diff Kernel" model |> ignore
+
+let FFT () =
+
+    let last = 31
+
+    let X = 
+        [| 0 .. last |]
+        |> Array.map( fun i -> float( i )/float(last+1) * 10.0 *  System.Math.PI )
+    
+    let Y  = X |> Array.map( fun x -> 1.0 + sin( x ) )
+
+    let Y2 = Array.zeroCreate (Y.Length * 2)
+    
+    Y
+    |> Array.iteri( fun i x -> Y2.[i*2] <- x )
+
+    Y
+    |> Array.iteri( fun i _ -> printfn "%f, %f" Y2.[2*i] Y2.[2*i+1] )
+
+  
+    let fft = Fourier.forwardFFT Y2
+
+    printfn "-----"
+
+    Y
+    |> Array.iteri( fun i _ -> printfn "%f, %f" Y2.[2*i] Y2.[2*i+1] )
 
 
 let Akima () =

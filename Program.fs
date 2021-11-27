@@ -4,7 +4,8 @@ open Playground
 [<EntryPoint>]
 let main argv = 
 
-    Exp2Diff()
+    //Exp2Diff()
+    FFT()
 (*    Wav.readAllWav "E:/2020/Audio/MesoTest.wav"
     |> Wav.dFourierL 8192 32
     |> createHeatModel (-1.0) (1.0) ( 1.0 ) 
