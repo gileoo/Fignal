@@ -68,7 +68,14 @@ let FFT () =
     printfn "-----"
 
     Y
-    |> Array.iteri( fun i _ -> printfn "%f, %f" Y2.[2*i] Y2.[2*i+1] )
+    |> Array.iteri( fun i _ -> printfn "%f, %f" fft.[2*i] fft.[2*i+1] )
+
+    printfn "-----"
+    
+    let iFft = Fourier.inverseFFT fft
+
+    Y
+    |> Array.iteri( fun i _ -> printfn "%f, %f" iFft.[2*i] iFft.[2*i+1] )
 
 
 let Akima () =

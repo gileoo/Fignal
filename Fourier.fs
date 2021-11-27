@@ -48,7 +48,7 @@ let inverseDFT = discreteFT false
 // following Numerical Recipes Chapter 12.2.1
 // first not too much refactored
 let private four1 (doInverse:bool) (d:float[]) =
-    
+
     let isign = if doInverse then -1 else 1
 
     let N = d.Length/2
@@ -57,6 +57,9 @@ let private four1 (doInverse:bool) (d:float[]) =
     if N < 2 || N &&& (N-1) <> 0 then
         let msg = sprintf "four1 requires a power of 2 size input but is: %d" d.Length
         failwith msg
+
+    // embrace immutabilty of the input
+    let dr = Array.copy d
 
     let nn = N <<< 1 
 
@@ -67,7 +70,7 @@ let private four1 (doInverse:bool) (d:float[]) =
         a.[ib] <- a.[ia]
         a.[ia] <- tmp
 
-    let swap = swapAI d
+    let swap = swapAI dr
 
     [|1 .. 2 .. nn-1|]
     |> Array.iter( fun i -> 
@@ -100,12 +103,12 @@ let private four1 (doInverse:bool) (d:float[]) =
             let mutable i = m
             while i <= nn do    // (for (i = m; i <= nn; i += istep) )
                 j <- i + mmax
-                let tempr = wr*d.[j-1] - wi*d.[j]
-                let tempi = wr*d.[j] + wi*d.[j-1]
-                d.[j-1] <- d.[i-1] - tempr
-                d.[j]   <- d.[i] - tempi
-                d.[i-1] <- d.[i-1] + tempr
-                d.[i]   <- d.[i] + tempi
+                let tempr = wr*dr.[j-1] - wi*dr.[j]
+                let tempi = wr*dr.[j] + wi*dr.[j-1]
+                dr.[j-1] <- dr.[i-1] - tempr
+                dr.[j]   <- dr.[i] - tempi
+                dr.[i-1] <- dr.[i-1] + tempr
+                dr.[i]   <- dr.[i] + tempi
                 i <- i + istep
             wtemp <- wr
             wr <- wr * wpr - wi * wpi + wr
@@ -113,7 +116,7 @@ let private four1 (doInverse:bool) (d:float[]) =
             m <- m + 2
         mmax <- istep
   
-    d
+    dr
     
 let forwardFFT (data:float[]) =
     four1 false data
